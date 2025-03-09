@@ -31,8 +31,9 @@ export default function TestForm({testId}: { testId: string }) {
           <Dropdown
             options={answerTypes}
             placeholder={'Выберите тип ответа'}
+            selected={[answerTypes[question.answerType]]}
             onSelect={(selected) => {
-              const type = answerTypes.indexOf(selected)
+              const type = Array.isArray(selected) ? answerTypes.indexOf(selected[0]) : answerTypes.indexOf(selected)
               store.updateQuestion(testId, question.id, {answerType: type})
             }}
           />

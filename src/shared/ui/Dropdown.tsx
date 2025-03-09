@@ -7,24 +7,27 @@ interface DropdownProps {
   options: string[]
   placeholder: string
   multiple?: boolean
-  onSelect: (selected: string) => void
+  selected?: string[]
+  onSelect: (selected: string | string[]) => void
 }
 
-export default function Dropdown({options, placeholder, multiple = false, onSelect}: DropdownProps) {
+export default function Dropdown({options, placeholder, multiple = false, selected = [], onSelect}: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [selectedValues, setSelectedValues] = useState<string[]>([])
   const selectRef = useRef<HTMLDivElement>(null)
 
-  const handleSelect = (selected: string) => {
+  const handleSelect = (selectedItem: string) => {
+    let newSelectedValues: string[] | string
+
     if (multiple) {
-      setSelectedValues((prev) =>
-        prev.includes(selected) ? prev.filter((v) => v !== selected) : [...prev, selected]
-      )
+      newSelectedValues = selected.includes(selectedItem)
+        ? selected.filter((v) => v !== selectedItem)
+        : [...selected, selectedItem]
     } else {
-      setSelectedValues([selected])
+      newSelectedValues = selectedItem
       setIsOpen(false)
     }
-    onSelect(selected)
+
+    onSelect(newSelectedValues)
   }
 
   useEffect(() => {
@@ -40,8 +43,18 @@ export default function Dropdown({options, placeholder, multiple = false, onSele
 
   return (
     <div className={'relative'} ref={selectRef}>
-      <SelectInput placeholder={placeholder} value={selectedValues.join(', ')} onClick={() => setIsOpen(!isOpen)}/>
-      {isOpen && <Select options={options} onSelect={handleSelect} selectedValues={selectedValues}/>}
+      <SelectInput
+        placeholder={placeholder}
+        value={Array.isArray(selected) ? selected.join(', ') : selected}
+        onClick={() => setIsOpen(!isOpen)}
+      />
+      {isOpen && (
+        <Select
+          options={options}
+          onSelect={handleSelect}
+          selectedValues={Array.isArray(selected) ? selected : [selected]}
+        />
+      )}
     </div>
   )
 }

@@ -16,7 +16,7 @@ export default function TestCreation() {
   return (
     <div className={'flex flex-col gap-4'}>
       <div className={'flex justify-between flex-wrap gap-4'}>
-        <h1 className={'font-bold text-2xl'}>Создание теста</h1>
+        <h1 className={'font-bold text-3xl'}>Создание теста</h1>
         <Button text={'Импортировать'} color={'secondary'} icon={<Import size={16}/>}/>
       </div>
       <div className={'flex flex-col gap-2'}>

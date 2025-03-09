@@ -3,7 +3,11 @@ import {useEffect, useRef, useState} from 'react'
 import DateInput from '@/shared/ui/DateInput'
 import Calendar from '@/shared/ui/Calendar'
 
-export default function DatePicker() {
+interface DatePickerProps {
+  onChange: (date: Date | null) => void
+}
+
+export default function DatePicker({onChange}: DatePickerProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [date, setDate] = useState<Date | null>(null)
   const selectRef = useRef<HTMLDivElement>(null)
@@ -20,7 +24,9 @@ export default function DatePicker() {
   }, [])
 
   const handleDate = (year: number, month: number, day: number) => {
-    setDate(new Date(year, month, day))
+    const selectedDate = new Date(year, month, day)
+    setDate(selectedDate)
+    onChange(selectedDate)
   }
 
   return (
