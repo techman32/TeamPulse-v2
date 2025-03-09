@@ -3,7 +3,7 @@ import cn from 'classnames'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string,
-  color: 'primary' | 'secondary' | 'danger'
+  color?: 'primary' | 'secondary' | 'danger'
 }
 
 export default function Button({text, color = 'primary', ...props}: ButtonProps) {
