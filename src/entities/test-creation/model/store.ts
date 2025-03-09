@@ -1,10 +1,5 @@
 import {create} from 'zustand'
 
-type Theme = {
-  id: string;
-  name: string;
-};
-
 type Tag = {
   name: string,
   points: number
@@ -19,63 +14,76 @@ type Answer = {
 type Question = {
   id: string,
   title: string,
-  themeId?: string,
-  topic: string | 'default',
   answerType: number,
   answers: Answer[],
   tags: string[],
 }
 
+type Test = {
+  id: string,
+  topic?: string,
+  questions: Question[]
+}
+
 type TestCreationStore = {
   title: string,
   description: string,
-  questions: Question[],
-  themes: Theme[];
-
+  tests: Test[],
   setTitle: (title: string) => void,
   setDescription: (description: string) => void,
-  addQuestion: () => void,
-  updateQuestion: (id: string, data: Partial<Question>) => void,
-  addTheme: (name: string) => void;
+  addTest: () => void,
+  setTestTopic: (id: string, topic: string) => void,
+  addQuestion: (testId: string) => void,
+  updateQuestion: (testId: string, questionId: string, data: Partial<Question>) => void,
 }
 
 export const useTestCreationStore = create<TestCreationStore>((set) => ({
   title: '',
   description: '',
-  questions: [],
-  themes: [],
-
+  tests: [],
   setTitle: (title: string) => set({title}),
   setDescription: (description: string) => set({description}),
-  addQuestion: () => set((state) => ({
-    questions: [
-      ...state.questions,
-      {
-        id: crypto.randomUUID(),
-        title: '',
-        topic: 'default',
-        answerType: 0,
-        answers: [],
-        tags: []
-      }
-    ]
+  addTest: () => set((state) => ({
+    tests: [...state.tests, {
+      id: crypto.randomUUID(),
+      topic: 'default',
+      questions: []
+    }]
   })),
-  updateQuestion: (id: string, data: Partial<Question>) =>
-    set((state) => ({
-      questions: state.questions.map((q) =>
-        q.id === id ? {...q, ...data} : q)
-    })),
-  addTheme: (name) => {
-    if (name.trim()) {
-      set((state) => ({
-        themes: [
-          ...state.themes,
-          {
-            id: crypto.randomUUID(),
-            name
-          }
-        ]
-      }))
-    }
-  }
+  setTestTopic: (id: string, topic: string) => set((state) => ({
+    tests: state.tests.map(test => test.id === id ? {...test, topic} : test)
+  })),
+  addQuestion: (testId: string) => set((state) => ({
+    tests: state.tests.map(test =>
+      test.id === testId
+        ? {
+          ...test,
+          questions: [
+            ...test.questions,
+            {
+              id: crypto.randomUUID(),
+              title: '',
+              answerType: 0,
+              answers: [],
+              tags: []
+            }
+          ]
+        }
+        : test
+    )
+  })),
+  updateQuestion: (testId: string, questionId: string, data: Partial<Question>) => set((state) => ({
+    tests: state.tests.map(test =>
+      test.id === testId
+        ? {
+          ...test,
+          questions: test.questions.map(question =>
+            question.id === questionId
+              ? {...question, ...data}
+              : question
+          )
+        }
+        : test
+    )
+  }))
 }))
