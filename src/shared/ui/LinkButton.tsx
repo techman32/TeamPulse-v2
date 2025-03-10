@@ -1,4 +1,4 @@
-import {ButtonHTMLAttributes} from 'react'
+import {ButtonHTMLAttributes, ReactNode} from 'react'
 import Link from 'next/link'
 import Button from '@/shared/ui/Button'
 
@@ -6,6 +6,7 @@ interface LinkButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string
   href: string
   color?: 'primary' | 'secondary' | 'danger'
+  icon?: ReactNode
 }
 
 export default function LinkButton({text, color = 'primary', href, ...props}: LinkButtonProps) {

@@ -1,3 +1,4 @@
+import axios from 'axios'
 import {create} from 'zustand'
 
 type Tag = {
@@ -35,9 +36,10 @@ type TestCreationStore = {
   setTestTopic: (id: string, topic: string) => void,
   addQuestion: (testId: string) => void,
   updateQuestion: (testId: string, questionId: string, data: Partial<Question>) => void,
+  sendData: () => Promise<void>,
 }
 
-export const useTestCreationStore = create<TestCreationStore>((set) => ({
+export const useTestCreationStore = create<TestCreationStore>((set, get) => ({
   title: '',
   description: '',
   tests: [],
@@ -85,5 +87,38 @@ export const useTestCreationStore = create<TestCreationStore>((set) => ({
         }
         : test
     )
-  }))
+  })),
+  sendData: async (): Promise<void> => {
+    try {
+      const {title, description, tests} = get()
+      const data = {
+        title: title,
+        description: description,
+        tests: tests.map(test => ({
+            topic: test.topic,
+            questions: test.questions.map(question => ({
+              title: question.title,
+              answerType: question.answerType,
+              tags: question.tags,
+              answers: question.answers.map((answer) => ({
+                text: answer.text,
+                tagPoints: answer.tagPoints.map((tag) => ({
+                  name: tag.name,
+                  tagPoints: tag.points
+                }))
+              }))
+            }))
+          }
+        ))
+      }
+      await axios.post('/api/v1/tests', data, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      console.error('Error creating tests', error)
+    }
+  }
 }))

@@ -9,8 +9,8 @@ import {Import} from 'lucide-react'
 export default function TestCreation() {
   const store = useTestCreationStore()
 
-  const handleSubmit = () => {
-    console.log(store)
+  const handleSubmit = async () => {
+    await store.sendData()
   }
 
   return (
