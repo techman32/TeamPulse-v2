@@ -2,6 +2,7 @@
 import Button from '@/shared/ui/Button'
 import Link from 'next/link'
 import {useEffect, useState} from 'react'
+import LinkButton from '@/shared/ui/LinkButton'
 
 export default function Welcome() {
   const [mousePosition, setMousePosition] = useState({x: 0, y: 0})
@@ -39,7 +40,10 @@ export default function Welcome() {
         Гибкая интеграция для удобной работы в вашей экосистеме.
       </p>
       <div className={'flex flex-col gap-2 items-center'}>
-        <Button text={'Оставть заявку'}/>
+        <div className={'flex gap-4'}>
+          <Button text={'Оставть заявку'}/>
+          <LinkButton href={'/dashboard'} text={'Перейти в панель управления'} color={'secondary'}/>
+        </div>
         <Link href={'/sign-in'}>
           <span className={'text-sm hover:underline underline-offset-4'}>Уже зарегистрированы?</span>
         </Link>

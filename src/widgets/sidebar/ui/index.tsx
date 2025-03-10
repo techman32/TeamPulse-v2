@@ -2,12 +2,13 @@
 import Link from 'next/link'
 import {motion} from 'framer-motion'
 import {useState, useEffect} from 'react'
-import {House, Notebook, PlusCircle, Users} from 'lucide-react'
+import {Bolt, House, Notebook, PlusCircle, Users} from 'lucide-react'
 
 const menuItems = [
   {href: '/dashboard', icon: <House size={24}/>, label: 'Главная'},
   {href: '/dashboard/tests', icon: <Notebook size={24}/>, label: 'Тесты'},
   {href: '/dashboard/users', icon: <Users size={24}/>, label: 'Пользователи'},
+  {href: '/dashboard/settings', icon: <Bolt size={24}/>, label: 'Настройки'},
   {href: '/dashboard/tests/create', icon: <PlusCircle size={24}/>, label: 'Создать тест'}
 ]
 
