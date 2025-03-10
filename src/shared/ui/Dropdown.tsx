@@ -8,10 +8,11 @@ interface DropdownProps {
   placeholder: string
   multiple?: boolean
   selected?: string[]
+  disabled?: boolean,
   onSelect: (selected: string | string[]) => void
 }
 
-export default function Dropdown({options, placeholder, multiple = false, selected = [], onSelect}: DropdownProps) {
+export default function Dropdown({options, placeholder, multiple = false, selected = [], disabled, onSelect}: DropdownProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const selectRef = useRef<HTMLDivElement>(null)
 
@@ -30,6 +31,12 @@ export default function Dropdown({options, placeholder, multiple = false, select
     onSelect(newSelectedValues)
   }
 
+  const handleOpen = () => {
+    if (!disabled) {
+      setIsOpen(!isOpen)
+    }
+  }
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (selectRef.current && !selectRef.current.contains(event.target as Node)) {
@@ -46,7 +53,8 @@ export default function Dropdown({options, placeholder, multiple = false, select
       <SelectInput
         placeholder={placeholder}
         value={Array.isArray(selected) ? selected.join(', ') : selected}
-        onClick={() => setIsOpen(!isOpen)}
+        disabled={disabled}
+        onClick={handleOpen}
       />
       {isOpen && (
         <Select
