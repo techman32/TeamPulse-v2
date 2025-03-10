@@ -7,7 +7,7 @@ export default function DashboardLayout({children}: { children: ReactNode }) {
     <div className="h-screen">
       <Logo/>
       <Sidebar/>
-      <div className="pt-[61px] h-screen overflow-auto p-4">
+      <div className="pt-[61px] h-screen overflow-auto px-14">
         {children}
       </div>
     </div>
